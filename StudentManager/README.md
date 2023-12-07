@@ -17,3 +17,26 @@ npm run build
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+
+
+### todo list
+
+----student table-----
+id    int    importantKey 
+name  varchar 
+sex   char
+age   int
+------------------
+
+###frontend####   
+vue  
+axios 
+#######
+
+###backend###
+msyql 
+servlet
+###########
+
