@@ -17,6 +17,7 @@
             <br>
             <ul>
               <li>初期表示功能，结合axios</li>
+              finished
               <!-- function searching  -->
               <li>搜索功能</li>
               <input v-model="keyword" @keyup.enter="search" style="outline: auto;margin: auto 20px;">
@@ -35,7 +36,7 @@
             </v-card-title>
             <v-card-text style="background-color: rgb(222, 225, 230);">
               <v-data-table :headers="headers" :items="filterData.length > 0 ? filterData : sData"
-                :items-per-page="3"></v-data-table>
+                :items-per-page="5"></v-data-table>
             </v-card-text>
           </v-card>
         </v-col>
@@ -54,7 +55,7 @@ export default {
   data() {
     return {
       headers: [
-        { text: 'id', value: 'id' },
+        { text: 'id', value: 'sid' },
         { text: 'name', value: 'name' },
         { text: 'Sex', value: 'sex' },
         { text: 'Age', value: 'age' },
@@ -69,13 +70,13 @@ export default {
     };
   },
   created() {
-    axios.get('http://localhost:3000/stdata')
+    axios.get('/student')
       .then(response => {
-        this.sData = response.data
+        this.sData = response.data.data
         console.log(this.sData);
       })
       .catch(error => {
-        console.error('Error fetching data:', error);
+        console.error('SDJ fetching data Failed:', error);
       })
   },
   methods: {
