@@ -6,7 +6,7 @@ Mock.mock('/api/test', 'get', {
     {
       'id|+1': 1,
       'studentId': function () {
-        // Function to pad the ID with leading zeros to make it three digits
+        // 为了好看，给前面数据添加两个0
         return ('00' + this.id).slice(-3);
       },
       'name': '@name',
