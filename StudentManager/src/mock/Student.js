@@ -7,6 +7,7 @@ Mock.mock('/api/test', 'get', {
       'id|+1': 1,
       'studentId': function () {
         // 为了好看，给前面数据添加两个0
+
         return ('00' + this.id).slice(-3);
       },
       'name': '@name',
@@ -15,3 +16,7 @@ Mock.mock('/api/test', 'get', {
     },
   ],
 });
+
+
+
+// 可删除： 测试vscode 内部github工具
