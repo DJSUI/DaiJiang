@@ -2,6 +2,28 @@
   <v-app>
     <div>
       <v-container>
+
+        <v-dialog
+          v-model="showDialog"
+          max-width="500px"
+        >
+          <v-card>
+            <v-card-title>确认删除</v-card-title>
+            <v-card-text>确定要删除该学生信息吗？</v-card-text>
+            <v-card-actions>
+              <v-btn
+                color="red darken-1"
+                text
+                @click="deleteStudent"
+              >确认</v-btn>
+              <v-btn
+                text
+                @click="showDialog = false"
+              >取消</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
         <v-data-table
           :headers="headers"
           :items="students"
@@ -34,7 +56,9 @@
               <td>{{ item.age }}</td>
               <td>
                 <v-icon @click="editStudent(item)">mdi-pencil</v-icon>
-                <v-icon @click="deleteStudent(item)">mdi-delete</v-icon>
+                <!-- <v-icon @click="deleteStudent(item)">mdi-delete</v-icon> -->
+                <v-icon @click="confirmDelete(item)">mdi-delete</v-icon>
+
               </td>
             </tr>
           </template>
@@ -60,7 +84,9 @@ export default {
         //* *******************
         { text: '操作', value: 'actions', sortable: false }
       ],
-      students: []
+      students: [],
+      showDialog: false,
+      studentToDelete: null
 
     }
   },
@@ -87,8 +113,27 @@ export default {
     editStudent(student) {
       // TODO：编辑学生信息的逻辑
     },
-    deleteStudent(student) {
-      // TODO：删除学生信息的逻辑
+    confirmDelete(student) {
+      this.studentToDelete = student
+      this.showDialog = true
+    },
+    deleteStudent() {
+      // 删除学生信息的逻辑
+      if (this.studentToDelete) {
+        // 获取到的学生ID信息
+        console.log("catch studnet ID !!" + this.studentToDelete.studentId);
+
+        axios.delete(`http://localhost:8085/api/Students/${this.studentToDelete.studentId}`)
+          .then(response => {
+            console.log('Student deleted successfully')
+            this.fetchStudents() // 重新获取数据以更新页面
+          })
+          .catch(error => {
+            console.error('Error deleting student:', error)
+
+          })
+      }
+      this.showDialog = false
     }
   }
 

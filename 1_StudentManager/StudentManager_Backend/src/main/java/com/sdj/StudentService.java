@@ -18,7 +18,17 @@ public class StudentService {
     }
 
 //    TODO  学生信息添加功能
-//    TODO  学生信息删除功能
+//     学生信息删除功能
+    public boolean deleteStudent(String id) {
+        int result = studentMapper.softDeleteStudent(id);
+        if (result == 0 ){
+            return false ;
+        }else{
+            return true;
+        }
+
+
+}
 //    TODO  学生信息修改功能
 
 
