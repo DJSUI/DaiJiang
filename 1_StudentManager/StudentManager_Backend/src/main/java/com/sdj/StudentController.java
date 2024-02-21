@@ -1,6 +1,8 @@
 package com.sdj;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,6 @@ public class StudentController {
     }
 
     //  删除学生信息
-    // 删除学生信息
     @DeleteMapping("/Students/{id}")
     @CrossOrigin(origins = "http://localhost:8080")
     public ResponseEntity<String> deleteStudent(@PathVariable String id) {
@@ -36,5 +37,29 @@ public class StudentController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PutMapping("/Students/{id}")
+    @CrossOrigin(origins = "http://localhost:8080")
+    public ResponseEntity<String> editStudent(@PathVariable String id,@RequestBody String jsonData) {
+
+        // 使用 Jackson 库将 JSON 字符串反序列化为 Student 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        Student updatedStudent = null;
+        try {
+            updatedStudent = objectMapper.readValue(jsonData, Student.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        // 在
+        // 调用Service层的方法删除学生信息
+        boolean updated = studentService.editStudent(id,updatedStudent);
+        if (updated) {
+            return ResponseEntity.ok("学生信息修改成功");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 
 }

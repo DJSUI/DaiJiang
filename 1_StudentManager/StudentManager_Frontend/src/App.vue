@@ -1,12 +1,25 @@
+<!-- 
+  @author Daijiang
+ -->
+<!-- TODO: GLOBAL
+    *【优先级：5】 对话框dailog 太低需要调整
+
+
+
+-->
+
+
+
 <template>
   <v-app>
     <div>
       <v-container>
-
+        <!-- 删除学生对话框 -->
         <v-dialog
-          v-model="showDialog"
+          v-model="showDelDialog"
           max-width="500px"
         >
+
           <v-card>
             <v-card-title>确认删除</v-card-title>
             <v-card-text>确定要删除该学生信息吗？</v-card-text>
@@ -18,10 +31,70 @@
               >确认</v-btn>
               <v-btn
                 text
-                @click="showDialog = false"
+                @click="showDelDialog = false"
               >取消</v-btn>
             </v-card-actions>
           </v-card>
+        </v-dialog>
+        <!-- 修改学生信息对话框 -->
+        <v-dialog
+          v-model="showEditDialog"
+          width="760px"
+          minx-with="500px"
+        >
+          <v-card>
+            <v-form>
+              <v-card-text>
+                <v-row>
+                  <v-col cols="6">
+                    <v-text-field
+                      v-model="studentEditInfo.studentId"
+                      label="学号"
+                      readonly
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col cols="6">
+                    <v-text-field
+                      clearable
+                      label="姓名"
+                      v-model="studentEditInfo.name"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="6">
+                    <v-select
+                      label="性别"
+                      v-model="studentEditInfo.gender"
+                      :items="['men', 'women']"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="6">
+                    <!-- TODO:【优先级：5】 将年龄调整为轮盘的样子  -->
+                    <v-text-field
+                      clearable
+                      label="年龄"
+                      v-model="studentEditInfo.age"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+
+              </v-card-text>
+            </v-form>
+            <v-card-actions>
+              <v-btn
+                color="red darken-1"
+                text
+                @click="editStudent"
+              >确认</v-btn>
+              <v-btn
+                text
+                @click="showEditDialog = false"
+              >取消</v-btn>
+            </v-card-actions>
+          </v-card>
+
         </v-dialog>
 
         <v-data-table
@@ -55,9 +128,9 @@
               <td>{{ item.gender }}</td>
               <td>{{ item.age }}</td>
               <td>
-                <v-icon @click="editStudent(item)">mdi-pencil</v-icon>
+                <v-icon @click="callEditStudent(item)">mdi-pencil</v-icon>
                 <!-- <v-icon @click="deleteStudent(item)">mdi-delete</v-icon> -->
-                <v-icon @click="confirmDelete(item)">mdi-delete</v-icon>
+                <v-icon @click="callDeleteStudent(item)">mdi-delete</v-icon>
 
               </td>
             </tr>
@@ -85,8 +158,16 @@ export default {
         { text: '操作', value: 'actions', sortable: false }
       ],
       students: [],
-      showDialog: false,
-      studentToDelete: null
+      studentToDelete: null,
+      studentEditInfo: {
+        studentId: null,
+        name: null,
+        gender: null,
+        age: ''
+      },
+      showDelDialog: false,
+      showEditDialog: false,
+
 
     }
   },
@@ -103,38 +184,88 @@ export default {
           // 真实API students 形式是一群对象的形式，使用空数组接收形式： this.students = response.data;
           // MOCKAPI students 形式是父对象包含子对象，使用空数组接收形式： this.students = response.data.data;
           this.students = response.data
-          //  TEST 数据形式
-          console.log('!!! Students data forms: ' + this.students[0].name)
+
+
         })
         .catch(error => {
           console.error('!!!!mei zhao dao Error fetching students:', error)
         })
     },
-    editStudent(student) {
-      // TODO：编辑学生信息的逻辑
-    },
-    confirmDelete(student) {
+
+    callDeleteStudent(student) {
       this.studentToDelete = student
-      this.showDialog = true
+      this.showDelDialog = true
+
     },
+    callEditStudent(student) {
+
+      this.studentEditInfo.studentId = student.studentId
+      this.studentEditInfo.name = student.name
+      this.studentEditInfo.gender = student.gender
+      this.studentEditInfo.age = student.age
+
+      this.showEditDialog = true
+
+    },
+    // 删除学生信息逻辑************************
     deleteStudent() {
-      // 删除学生信息的逻辑
+
       if (this.studentToDelete) {
         // 获取到的学生ID信息
         console.log("catch studnet ID !!" + this.studentToDelete.studentId);
 
         axios.delete(`http://localhost:8085/api/Students/${this.studentToDelete.studentId}`)
           .then(response => {
-            console.log('Student deleted successfully')
+
             this.fetchStudents() // 重新获取数据以更新页面
           })
           .catch(error => {
             console.error('Error deleting student:', error)
 
           })
+          .finally(() => {
+            this.showDelDialog = false
+
+          })
+        // TODO：【优先级5】删除alert 信息 和 对话框同时出现  期望： 对话框先结束，在显示 alert  
+        alert('学生信息删除成功');
       }
-      this.showDialog = false
+
+
+    },
+    // 编辑学生信息逻辑********************
+    editStudent() {
+
+      if (this.studentEditInfo) {
+        // 将对象信息序列化成json字符串传到后端
+        let jsonData = JSON.stringify(this.studentEditInfo);
+        // 调用后端接口保存编辑后的学生信息
+        axios.put(`http://localhost:8085/api/Students/${this.studentEditInfo.studentId}`, jsonData, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(response => {
+            console.log('学生信息已更新');
+            this.editDialog = false;
+            // 更新成功后刷新页面或重新获取学生列表
+            this.fetchStudents();
+          })
+          .catch(error => {
+            console.error('更新学生信息时出错:', error);
+          })
+          .finally(() => {
+            this.showEditDialog = false
+          })
+
+      }
+
+
+
+
+
     }
+
   }
 
 }
