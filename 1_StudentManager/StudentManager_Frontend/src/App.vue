@@ -14,6 +14,32 @@
   <v-app>
     <div>
       <v-container>
+        <!-- 搜索栏 -->
+        <v-card>
+          <v-card-title class="d-flex justify-space-between align-center">
+            <div class="d-flex align-center">
+              <v-icon style="color: blue;">mdi-magnify</v-icon>
+              <h6>&emsp; 检索条件</h6>
+            </div>
+            <v-btn
+              tabindex="0"
+              @click="searchStudent"
+            >检索</v-btn> <!-- 移动到这里 -->
+          </v-card-title>
+          <v-card-text>
+            <div>
+
+              <v-text-field
+                style="width: 1000px; margin: 0 auto;"
+                clearable
+                v-model="keywords"
+                outlined
+              ></v-text-field>
+
+            </div>
+          </v-card-text>
+
+        </v-card>
         <!-- 删除学生对话框 -->
         <v-dialog
           v-model="showDelDialog"
@@ -167,6 +193,7 @@ export default {
       },
       showDelDialog: false,
       showEditDialog: false,
+      keywords: '',
 
 
     }
@@ -259,12 +286,40 @@ export default {
           })
 
       }
+    },
+    // 搜索学生信息逻辑********************
+    searchStudent() {
 
+      if (this.keywords && this.keywords.trim() !== '') {
+        // 获取到的学生ID信息
+        console.log("catch keywords !!" + this.keywords);
 
+        axios.get(`http://localhost:8085/api/Students/search?keywords=${this.keywords}`)
+          .then(response => {
+            this.students = response.data
+          })
+          .catch(error => {
+            console.error('!!!!edit wrong ', error)
+          })
+      } else {
+        axios.get('http://localhost:8085/api/Students')
+          .then(response => {
+            this.students = response.data
+            console.log("搜索条件为空，获取所有数据");
 
+          })
+          .catch(error => {
+            console.error('!!!!mei zhao dao Error fetching students:', error)
+          })
+      }
 
 
     }
+
+
+
+
+
 
   }
 

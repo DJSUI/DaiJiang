@@ -20,6 +20,11 @@ import java.util.List;
         List<Student>  getAllStudents();
     //    void addStudent(Student student);
     //    void updateStudent(Student student);
+
+//        关键字查询学生信息逻辑
+@Select("SELECT * FROM Students WHERE is_deleted != 1 AND (studentId LIKE CONCAT('%', #{keywords}, '%') OR name LIKE CONCAT('%', #{keywords}, '%') OR gender LIKE CONCAT('%', #{keywords}, '%') OR age LIKE CONCAT('%', #{keywords}, '%'))")
+        List<Student>  resualtStudents(String keywords);
+
 //        删除学生逻辑逻辑
         @Update("UPDATE Students SET is_deleted = 1 WHERE studentId = #{id}")
         int softDeleteStudent(String id);

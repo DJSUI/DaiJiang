@@ -25,6 +25,15 @@ public class StudentController {
         return studentService.getAllStudents();
     }
 
+//    查询学生信息
+    @GetMapping("/Students/search")
+    @CrossOrigin(origins = "http://localhost:8080")
+    public List<Student> searchStudents(@RequestParam("keywords") String keywords) {
+        // 调用Service层的方法查询学生信息
+        return studentService.searchStudents(keywords);
+    }
+
+
     //  删除学生信息
     @DeleteMapping("/Students/{id}")
     @CrossOrigin(origins = "http://localhost:8080")
