@@ -22,15 +22,8 @@ See [Configuration Reference](https://4399.com).
 
 
 ###  数据库创建 
-+------------+--------------+------+-----+---------+-------+
-| Field      | Type         | Null | Key | Default | Extra |
-+------------+--------------+------+-----+---------+-------+
-| studentId  | varchar(100) | NO   | PRI | NULL    |       |
-| name       | varchar(100) | YES  |     | NULL    |       |
-| gender     | varchar(10)  | YES  |     | NULL    |       |
-| age        | int(10)      | YES  |     | NULL    |       |
-| is_deleted | tinyint(1)   | YES  |     | 0       |       |
-+------------+--------------+------+-----+---------+-------+
+<img width="480" alt="image" src="https://github.com/DJSUI/DaiJiang/assets/149217806/e8c20d4b-3251-4877-87fc-f44764a206b3">
+
 
 ###技术栈####   
 vue  
