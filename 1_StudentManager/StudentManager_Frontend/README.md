@@ -21,26 +21,24 @@ See [Configuration Reference](https://4399.com).
 
 
 
-### todo list
+###  数据库创建 
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| studentId  | varchar(100) | NO   | PRI | NULL    |       |
+| name       | varchar(100) | YES  |     | NULL    |       |
+| gender     | varchar(10)  | YES  |     | NULL    |       |
+| age        | int(10)      | YES  |     | NULL    |       |
+| is_deleted | tinyint(1)   | YES  |     | 0       |       |
++------------+--------------+------+-----+---------+-------+
 
-----student table-----
-id    int    importantKey 
-name  varchar 
-sex   char
-age   int
-------------------
-
-###frontend####   
+###技术栈####   
 vue  
+veutify 【在将veutify 加入到packagejson 文件当中】
 axios 
 #######
 
-###backend###
-msyql 
-servlet
-###########
 
-项目已安装了veutify 
 
 
 
