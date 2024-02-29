@@ -28,11 +28,11 @@ public class StudentService {
 
 
 }
-//    TODO 【优先级1】 学生信息修改功能
+//   学生信息修改功能
 public boolean editStudent(String id ,Student updatedStudent) {
     int result = studentMapper.editStudent(id,updatedStudent);
     if (result == 0) {
-        System.out.println("数据库里没找到！！！  ");
+        System.out.println("修改时候，数据库里没找到！！！  ");
 
         return false;
 
@@ -42,8 +42,20 @@ public boolean editStudent(String id ,Student updatedStudent) {
     }
 }
 //    TODO  【优先级1】学生信息添加功能
+public boolean addStudent(String id ,Student addStudent) {
+    int result = studentMapper.addStudent(id,addStudent);
+    if (result == 0) {
+        System.out.println("添加时候，数据库里出错！！！  ");
 
-//    TODO  【优先级1】学生信息查询功能
+        return false;
+
+
+    } else {
+        return true;
+    }
+}
+
+//    学生信息查询功能
     public List<Student> searchStudents(String keywords) {
     return studentMapper.resualtStudents(keywords);
 

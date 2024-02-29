@@ -1,15 +1,16 @@
 <!-- 
   @author Daijiang
+
  -->
-<!-- TODO: GLOBAL
-    *【优先级：5】 对话框dailog 太低需要调整
+<!--GLOBAL TODO
 
+     TODO: 【优先级：5】 对话框dailog 太低需要调整
+     TODO:【优先级：5】  修改信息对话框为轮盘选择的样子 
+     TODO:【优先级：5】  如何修改一览表像魏桑写的组件那样
 
+     
 
 -->
-
-
-
 <template>
   <v-app>
     <div>
@@ -18,13 +19,17 @@
         <v-card>
           <v-card-title class="d-flex justify-space-between align-center">
             <div class="d-flex align-center">
-              <v-icon style="color: blue;">mdi-magnify</v-icon>
+              <v-icon style="color: skyblue;">mdi-magnify</v-icon>
               <h6>&emsp; 检索条件</h6>
             </div>
             <v-btn
               tabindex="0"
               @click="searchStudent"
-            >检索</v-btn> <!-- 移动到这里 -->
+            >检索</v-btn>
+            <v-btn
+              tabindex="0"
+              @click="callAddStudent"
+            >添加学生信息</v-btn>
           </v-card-title>
           <v-card-text>
             <div>
@@ -34,6 +39,7 @@
                 clearable
                 v-model="keywords"
                 outlined
+                @keyup.enter="searchStudent"
               ></v-text-field>
 
             </div>
@@ -69,58 +75,122 @@
           minx-with="500px"
         >
           <v-card>
-            <v-form>
-              <v-card-text>
-                <v-row>
-                  <v-col cols="6">
-                    <v-text-field
-                      v-model="studentEditInfo.studentId"
-                      label="学号"
-                      readonly
-                    ></v-text-field>
-                  </v-col>
+            <div style="padding: 20px;">
+              <v-form>
+                <v-card-text>
 
-                  <v-col cols="6">
-                    <v-text-field
-                      clearable
-                      label="姓名"
-                      v-model="studentEditInfo.name"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="6">
-                    <v-select
-                      label="性别"
-                      v-model="studentEditInfo.gender"
-                      :items="['men', 'women']"
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="6">
-                    <!-- TODO:【优先级：5】 将年龄调整为轮盘的样子  -->
-                    <v-text-field
-                      clearable
-                      label="年龄"
-                      v-model="studentEditInfo.age"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
+                  <v-row>
+                    <v-col cols="6">
+                      <v-text-field
+                        v-model="studentInfoBox.studentId"
+                        label="学号"
+                        readonly
+                      ></v-text-field>
+                    </v-col>
 
-              </v-card-text>
-            </v-form>
-            <v-card-actions>
-              <v-btn
-                color="red darken-1"
-                text
-                @click="editStudent"
-              >确认</v-btn>
-              <v-btn
-                text
-                @click="showEditDialog = false"
-              >取消</v-btn>
-            </v-card-actions>
+                    <v-col cols="6">
+                      <v-text-field
+                        clearable
+                        label="姓名"
+                        v-model="studentInfoBox.name"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="6">
+                      <v-select
+                        label="性别"
+                        v-model="studentInfoBox.gender"
+                        :items="['men', 'women']"
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="6">
+
+                      <v-text-field
+                        clearable
+                        label="年龄"
+                        v-model="studentInfoBox.age"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+
+                </v-card-text>
+              </v-form>
+              <v-card-actions>
+                <v-btn
+                  color="red darken-1"
+                  text
+                  @click="editStudent"
+                >确认</v-btn>
+                <v-btn
+                  text
+                  @click="showEditDialog = false"
+                >取消</v-btn>
+              </v-card-actions>
+            </div>
           </v-card>
+        </v-dialog>
 
+        <!-- 增加学生对话框  -->
+        <v-dialog
+          v-model="showAddDialog"
+          width="760px"
+          minx-with="500px"
+        >
+          <v-card>
+            <div style="padding: 20px;">
+              <v-form>
+                <v-card-text>
+
+                  <v-row>
+                    <v-col cols="6">
+                      <v-text-field
+                        v-model="studentInfoBox.studentId"
+                        label="学号"
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col cols="6">
+                      <v-text-field
+                        clearable
+                        label="姓名"
+                        v-model="studentInfoBox.name"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="6">
+                      <v-select
+                        label="性别"
+                        v-model="studentInfoBox.gender"
+                        :items="['men', 'women']"
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="6">
+
+                      <v-text-field
+                        clearable
+                        label="年龄"
+                        v-model="studentInfoBox.age"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+
+                </v-card-text>
+              </v-form>
+              <v-card-actions>
+                <v-btn
+                  color="red darken-1"
+                  text
+                  @click="addStudent"
+                >添加</v-btn>
+                <v-btn
+                  text
+                  @click="showAddDialog = false"
+                >取消</v-btn>
+              </v-card-actions>
+            </div>
+          </v-card>
         </v-dialog>
 
         <v-data-table
@@ -185,7 +255,7 @@ export default {
       ],
       students: [],
       studentToDelete: null,
-      studentEditInfo: {
+      studentInfoBox: {
         studentId: null,
         name: null,
         gender: null,
@@ -193,6 +263,7 @@ export default {
       },
       showDelDialog: false,
       showEditDialog: false,
+      showAddDialog: false,
       keywords: '',
 
 
@@ -204,6 +275,7 @@ export default {
     console.log('!!!!' + this.students)
   },
   methods: {
+    //  取得学生信息逻辑 ************************
     fetchStudents() {
       axios.get('http://localhost:8085/api/Students')
         .then(response => {
@@ -219,26 +291,17 @@ export default {
         })
     },
 
+    // 删除学生信息逻辑************************
     callDeleteStudent(student) {
+
       this.studentToDelete = student
       this.showDelDialog = true
 
     },
-    callEditStudent(student) {
-
-      this.studentEditInfo.studentId = student.studentId
-      this.studentEditInfo.name = student.name
-      this.studentEditInfo.gender = student.gender
-      this.studentEditInfo.age = student.age
-
-      this.showEditDialog = true
-
-    },
-    // 删除学生信息逻辑************************
     deleteStudent() {
 
       if (this.studentToDelete) {
-        // 获取到的学生ID信息
+        // 获取到的学生ID信息逻辑********
         console.log("catch studnet ID !!" + this.studentToDelete.studentId);
 
         axios.delete(`http://localhost:8085/api/Students/${this.studentToDelete.studentId}`)
@@ -254,27 +317,36 @@ export default {
             this.showDelDialog = false
 
           })
-        // TODO：【优先级5】删除alert 信息 和 对话框同时出现  期望： 对话框先结束，在显示 alert  
+        // TODO：【优先级5】 替换为正常弹出提示信息 
         alert('学生信息删除成功');
       }
 
 
     },
-    // 编辑学生信息逻辑********************
+    // 修改学生信息逻辑********************
+    callEditStudent(student) {
+
+      this.studentInfoBox.studentId = student.studentId
+      this.studentInfoBox.name = student.name
+      this.studentInfoBox.gender = student.gender
+      this.studentInfoBox.age = student.age
+      this.showEditDialog = true
+
+    },
     editStudent() {
 
-      if (this.studentEditInfo) {
+      if (this.studentInfoBox) {
         // 将对象信息序列化成json字符串传到后端
-        let jsonData = JSON.stringify(this.studentEditInfo);
+        let jsonData = JSON.stringify(this.studentInfoBox);
         // 调用后端接口保存编辑后的学生信息
-        axios.put(`http://localhost:8085/api/Students/${this.studentEditInfo.studentId}`, jsonData, {
+        axios.put(`http://localhost:8085/api/editStudent/${this.studentInfoBox.studentId}`, jsonData, {
           headers: {
             'Content-Type': 'application/json'
           }
         })
           .then(response => {
             console.log('学生信息已更新');
-            this.editDialog = false;
+
             // 更新成功后刷新页面或重新获取学生列表
             this.fetchStudents();
           })
@@ -314,12 +386,42 @@ export default {
       }
 
 
+    },
+    //   增加学生信息逻辑**********************
+    callAddStudent() {
+
+      for (const key in this.studentInfoBox) {
+        this.studentInfoBox[key] = null;
+      }
+      this.showAddDialog = true
+
+
+    },
+    addStudent() {
+      if (this.studentInfoBox) {
+        // 将对象信息序列化成json字符串传到后端
+        let jsonData = JSON.stringify(this.studentInfoBox);
+        // 调用后端接口保存编辑后的学生信息
+        axios.put(`http://localhost:8085/api/addStudent/${this.studentInfoBox.studentId}`, jsonData, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(response => {
+            console.log('学生信息已添加');
+
+            // 更新成功后刷新页面或重新获取学生列表
+            this.fetchStudents();
+          })
+          .catch(error => {
+            console.error('添加学生信息时出错:', error);
+          })
+          .finally(() => {
+            this.showAddDialog = false
+          })
+
+      }
     }
-
-
-
-
-
 
   }
 
