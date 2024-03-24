@@ -9,6 +9,7 @@ import java.util.List;
 @Service
 public class StudentService {
 //    2 studentMapper 调用mapper方法，并指向=》StudentMapper
+
 //     学生信息查询功能
     @Autowired
     private StudentMapper studentMapper;
@@ -41,7 +42,7 @@ public boolean editStudent(String id ,Student updatedStudent) {
         return true;
     }
 }
-//    TODO  【优先级1】学生信息添加功能
+//   学生信息添加功能
 public boolean addStudent(String id ,Student addStudent) {
     int result = studentMapper.addStudent(id,addStudent);
     if (result == 0) {
